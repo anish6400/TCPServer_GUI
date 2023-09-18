@@ -168,7 +168,12 @@ public class TCPServerGUIMain {
             messagePane.setPreferredSize(new Dimension(30, 100)); // Set the preferred size
             sendButton = new JButton("Send");
 
-            // ... (rest of the constructor remains unchanged)
+            sendButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    sendMessage();
+                }
+            });
 
             JPanel inputPanel = new JPanel();
             inputPanel.setLayout(new BorderLayout()); // Use BorderLayout for better component placement
@@ -214,12 +219,15 @@ public class TCPServerGUIMain {
 
         private void sendMessage() {
             String message = messagePane.getText();
-            if (!message.isEmpty()) {
-                logClient("Sent to client: " + message, Color.BLACK); // Log in black color
-
-                // Send the message to the client
-                out.println(message);
+            if(message.isEmpty()) {
+                return;
             }
+            String[] messageSplitByLine = message.split("\n");
+            for(String messageLine: messageSplitByLine){
+                logClient("Sent to client: " + messageLine, Color.BLACK); // Log in black color
+            }
+            // Send the message to the client
+            out.println(message);
             messagePane.setText("");
         }
 
